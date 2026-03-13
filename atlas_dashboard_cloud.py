@@ -1,19 +1,15 @@
 import streamlit as st
-import pandas as pd
 import gspread
-from oauth2client.service_account import ServiceAccountCredentials
-
-st.set_page_config(page_title="ATLAS Mission Control", layout="wide")
-
-st.title("ATLAS — Personal Operating System")
+from google.oauth2.service_account import Credentials
 
 scope = [
-'https://spreadsheets.google.com/feeds',
-'https://www.googleapis.com/auth/drive'
+"https://spreadsheets.google.com/feeds",
+"https://www.googleapis.com/auth/drive"
 ]
 
-credentials = ServiceAccountCredentials.from_json_keyfile_name(
-'credentials.json', scope)
+credentials = Credentials.from_service_account_info(
+    st.secrets["gcp_service_account"], scopes=scope
+)
 
 client = gspread.authorize(credentials)
 
@@ -53,4 +49,5 @@ st.subheader("HCF Impact")
 st.dataframe(hcf)
 
 st.subheader("Execution Log")
+
 st.dataframe(execution)
